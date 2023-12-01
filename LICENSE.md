@@ -1,4 +1,4 @@
-Copyright for portions of project adventofcode-go are held by 2020 Alex Chao as part of project advent-of-code-go. All other copyright for project adventofcode-go are held by Andrew Elkins 2023.
+Copyright for portions of project adventofcode-go are held by 2020 Alex Chao as part of project adventofcode-go. All other copyright for project adventofcode-go are held by Andrew Elkins 2023.
 
 MIT License
 

@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/alexchao26/advent-of-code-go/cast"
+	"github.com/andrewelkins/adventofcode-go/cast"
 )
 
 func CaptureBingoBoard(board string) [][]int {

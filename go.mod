@@ -1,4 +1,4 @@
-module github.com/andrewelkins/advent-of-code-go
+module github.com/andrewelkins/adventofcode-go
 
 go 1.16
 
