@@ -76,17 +76,12 @@ func part2(input string) int {
 
 	for _, line := range parsed {
 		t := re.FindAllString(line, -1)
-		fmt.Println(t) 
-
 		stringValue := cast.ToStringNumber(t[0])
 		
-		// second digit
+		// Should use look ahead in regex. Brute force for now
 		s := rereverse.FindAllString(mathy.Reverse(line), -1)
-		// fmt.Println(mathy.Reverse(s[0]))
-
 		stringValue = stringValue + cast.ToStringNumber(mathy.Reverse(s[0]))
 
-		// fmt.Println(stringValue) 
 		values = append(values, cast.ToInt(stringValue))
 	}
 
