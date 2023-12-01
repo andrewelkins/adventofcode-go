@@ -69,8 +69,7 @@ func part1(input string) int {
 func part2(input string) int {
 	parsed := parseInput(input)
 	_ = parsed
-	var values []int
-	result := 0 
+	var values []any
 	digitString := "one|two|three|four|five|six|seven|eight|nine"
 	re := regexp.MustCompile("("+digitString+")|\\d")
 	rereverse := regexp.MustCompile("("+mathy.Reverse(digitString)+")|\\d")
@@ -90,12 +89,8 @@ func part2(input string) int {
 		// fmt.Println(stringValue) 
 		values = append(values, cast.ToInt(stringValue))
 	}
-	
-	for _, v := range values {
-		result += v
-	}
 
-	return result
+	return mathy.Sum(values)
 }
 
 func parseInput(input string) (ans []string) {
