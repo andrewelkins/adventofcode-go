@@ -1,5 +1,10 @@
 package mathy
 
+import (	
+	"fmt"
+	"strconv"
+)
+
 func MaxInt(nums ...int) int {
 	maxNum := nums[0]
 	for _, v := range nums {
@@ -41,3 +46,30 @@ func MultiplyIntSlice(nums []int) int {
 	}
 	return product
 }
+
+func Sum(arr []any) int {
+    n := 0
+    for _, v := range arr {
+        switch v := v.(type) {
+        case int:
+            n += v
+        case string:
+            i, err := strconv.Atoi(v)
+            if err != nil {
+                panic(err)
+            }
+            n += i
+        default:
+            panic(fmt.Sprintf("unsupported type %T", v))
+        }
+    }
+    return n
+}
+
+
+func Reverse(s string) (result string) {
+	for _,v := range s {
+	  result = string(v) + result
+	}
+	return 
+  }

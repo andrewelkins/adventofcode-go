@@ -32,6 +32,6 @@ make input DAY=1 YEAR=2023
 
 [embed]: https://golang.org/pkg/embed/
 
-### Quick Note
-Learning Go with some help. Started by forking Alex's repo from [GH](https://github.com/alexchao26/advent-of-code-go/tree/main).
+### Original Source
+Learning Go with some help here. Alex Chao has a fanastic repo from many years of use. I've forked it to give me some assistance. [GH](https://github.com/alexchao26/advent-of-code-go/tree/main).
 
