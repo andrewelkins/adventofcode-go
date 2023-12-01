@@ -71,8 +71,9 @@ func part2(input string) int {
 	_ = parsed
 	var values []int
 	result := 0 
-	re := regexp.MustCompile("(one|two|three|four|five|six|seven|eight|nine)|\\d")
-	rereverse := regexp.MustCompile("(eno|owt|eerht|ruof|evif|xis|neves|thgie|enin)|\\d")
+	digitString := "one|two|three|four|five|six|seven|eight|nine"
+	re := regexp.MustCompile("("+digitString+")|\\d")
+	rereverse := regexp.MustCompile("("+mathy.Reverse(digitString)+")|\\d")
 
 	for _, line := range parsed {
 		t := re.FindAllString(line, -1)
