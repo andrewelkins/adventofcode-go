@@ -77,3 +77,29 @@ func ToASCIICode(arg interface{}) int {
 func ASCIIIntToChar(code int) string {
 	return string(rune(code))
 }
+
+func ToStringNumber(input string) string {
+	var result string
+	if input == "one" {
+		result = "1"
+	} else if input == "two" {
+		result = "2"
+	} else if input == "three" {
+		result = "3"
+	} else if input == "four" {
+		result = "4"
+	} else if input == "five" {
+		result = "5"
+	} else if input == "six" {
+		result = "6"
+	} else if input == "seven" {
+		result = "7"
+	} else if input == "eight" {
+		result = "8"
+	} else if input == "nine" {
+		result = "9"
+	} else {
+		result = input
+	}
+	return result
+}

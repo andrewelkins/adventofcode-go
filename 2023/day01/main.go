@@ -79,13 +79,13 @@ func part2(input string) int {
 		t := re.FindAllString(line, -1)
 		fmt.Println(t) 
 
-		stringValue := convertStringNumber(t[0])
+		stringValue := cast.ToStringNumber(t[0])
 		
 		// second digit
 		s := rereverse.FindAllString(mathy.Reverse(line), -1)
 		// fmt.Println(mathy.Reverse(s[0]))
 
-		stringValue = stringValue + convertStringNumber(mathy.Reverse(s[0]))
+		stringValue = stringValue + cast.ToStringNumber(mathy.Reverse(s[0]))
 
 		// fmt.Println(stringValue) 
 		values = append(values, cast.ToInt(stringValue))
@@ -105,28 +105,3 @@ func parseInput(input string) (ans []string) {
 	return ans
 }
 
-func convertStringNumber(input string) string {
-	var result string
-	if input == "one" {
-		result = "1"
-	} else if input == "two" {
-		result = "2"
-	} else if input == "three" {
-		result = "3"
-	} else if input == "four" {
-		result = "4"
-	} else if input == "five" {
-		result = "5"
-	} else if input == "six" {
-		result = "6"
-	} else if input == "seven" {
-		result = "7"
-	} else if input == "eight" {
-		result = "8"
-	} else if input == "nine" {
-		result = "9"
-	} else {
-		result = input
-	}
-	return result
-}
