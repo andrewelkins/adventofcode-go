@@ -68,7 +68,7 @@ func part1(input string) int {
 		}
 
 		if maxCount["red"] <= 12 && maxCount["green"] <= 13 && maxCount["blue"] <= 14 {
-			gamesGood = gamesGood + gameId
+			gamesGood += gameId
 		}
 	}
 
@@ -104,8 +104,7 @@ func part2(input string) int {
 			}
 		}
 
-		power := maxCount["red"] * maxCount["green"] * maxCount["blue"]
-		gamesGood = gamesGood + power
+		gamesGood += maxCount["red"] * maxCount["green"] * maxCount["blue"]
 	}
 
 	return gamesGood
