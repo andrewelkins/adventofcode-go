@@ -76,7 +76,39 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	_ = parsed
+	gamesGood := 0
+
+	for _, line := range parsed {
+		// Find game id
+		inputSplit := strings.Split(line, ":")
+		// gameId := cast.ToInt(strings.ReplaceAll(inputSplit[0], "Game ", ""))
+		games := strings.Split(inputSplit[1], ";")
+
+		maxCount := make(map[string]int)
+		maxCount["red"] = 0
+		maxCount["green"] = 0
+		maxCount["blue"] = 0
+		for _, line := range games {
+			games := strings.Split(line, ",")
+
+			for _, game := range games {
+				handSplit := strings.Split(strings.Trim(game, " "), " ")
+				color := handSplit[1]
+				count := cast.ToInt(handSplit[0])
+
+				if count > maxCount[color] {
+					maxCount[color] = count
+				}
+			}
+		}
+
+		power := maxCount["red"] * maxCount["green"] * maxCount["blue"]
+		gamesGood = gamesGood + power
+	}
+
+	return gamesGood
 }
 
 func parseInput(input string) (ans []string) {
