@@ -13,6 +13,17 @@ import (
 //go:embed input.txt
 var input string
 
+type Game struct {
+	gameId int
+	games []string
+}
+
+type Match struct {
+	red int
+	green int
+	blue int
+}
+
 func init() {
 	// do this in init (not main) so test file has same input
 	input = strings.TrimRight(input, "\n")
@@ -47,7 +58,7 @@ func part1(input string) int {
 
 		maxCount := generateMaxCountMap(games)
 
-		if maxCount["red"] <= 12 && maxCount["green"] <= 13 && maxCount["blue"] <= 14 {
+		if maxCount.red <= 12 && maxCount.green <= 13 && maxCount.blue <= 14 {
 			gamesGood += gameId
 		}
 	}
@@ -65,7 +76,7 @@ func part2(input string) int {
 
 		maxCount := generateMaxCountMap(games)
 
-		gamesGood += maxCount["red"] * maxCount["green"] * maxCount["blue"]
+		gamesGood += maxCount.red * maxCount.green * maxCount.blue
 	}
 
 	return gamesGood
@@ -98,11 +109,11 @@ func parseGame(input string) (ans []string) {
 	return strings.Split(input, ",")
 }
 
-func generateMaxCountMap(games []string) (maxCount map[string]int) {
-	maxCount = make(map[string]int)
-	maxCount["red"] = 0
-	maxCount["green"] = 0
-	maxCount["blue"] = 0
+func generateMaxCountMap(games []string) (maxCount Match) {
+	maxCount = Match{}
+	maxCount.red = 0
+	maxCount.green = 0
+	maxCount.blue = 0
 	for _, line := range games {
 		games := parseGame(line)
 
@@ -111,8 +122,20 @@ func generateMaxCountMap(games []string) (maxCount map[string]int) {
 			color := handSplit[1]
 			count := cast.ToInt(handSplit[0])
 
-			if count > maxCount[color] {
-				maxCount[color] = count
+			switch c := color ; c {
+				case "blue":
+					if count > maxCount.blue {
+						maxCount.blue = count
+					}
+				case "red":
+					if count > maxCount.red {
+						maxCount.red = count
+					}
+				case "green":
+					if count > maxCount.green {
+						maxCount.green = count
+					}
+				default:
 			}
 		}
 	}
