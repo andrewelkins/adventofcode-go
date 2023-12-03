@@ -40,32 +40,12 @@ func main() {
 
 func part1(input string) int {
 	parsed := parseInput(input)
-	_ = parsed
 	gamesGood := 0
 
 	for _, line := range parsed {
-		// Find game id
-		inputSplit := strings.Split(line, ":")
-		gameId := cast.ToInt(strings.ReplaceAll(inputSplit[0], "Game ", ""))
-		games := strings.Split(inputSplit[1], ";")
+		var gameId, games = parseGameIdAndGames(line)
 
-		maxCount := make(map[string]int)
-		maxCount["red"] = 0
-		maxCount["green"] = 0
-		maxCount["blue"] = 0
-		for _, line := range games {
-			games := strings.Split(line, ",")
-
-			for _, game := range games {
-				handSplit := strings.Split(strings.Trim(game, " "), " ")
-				color := handSplit[1]
-				count := cast.ToInt(handSplit[0])
-
-				if count > maxCount[color] {
-					maxCount[color] = count
-				}
-			}
-		}
+		maxCount := generateMaxCountMap(games)
 
 		if maxCount["red"] <= 12 && maxCount["green"] <= 13 && maxCount["blue"] <= 14 {
 			gamesGood += gameId
@@ -77,32 +57,13 @@ func part1(input string) int {
 
 func part2(input string) int {
 	parsed := parseInput(input)
-	_ = parsed
 	gamesGood := 0
 
 	for _, line := range parsed {
-		// Find game id
-		inputSplit := strings.Split(line, ":")
-		// gameId := cast.ToInt(strings.ReplaceAll(inputSplit[0], "Game ", ""))
-		games := strings.Split(inputSplit[1], ";")
+		var gameId, games = parseGameIdAndGames(line)
+		_ = gameId
 
-		maxCount := make(map[string]int)
-		maxCount["red"] = 0
-		maxCount["green"] = 0
-		maxCount["blue"] = 0
-		for _, line := range games {
-			games := strings.Split(line, ",")
-
-			for _, game := range games {
-				handSplit := strings.Split(strings.Trim(game, " "), " ")
-				color := handSplit[1]
-				count := cast.ToInt(handSplit[0])
-
-				if count > maxCount[color] {
-					maxCount[color] = count
-				}
-			}
-		}
+		maxCount := generateMaxCountMap(games)
 
 		gamesGood += maxCount["red"] * maxCount["green"] * maxCount["blue"]
 	}
@@ -115,4 +76,45 @@ func parseInput(input string) (ans []string) {
 		ans = append(ans, line)
 	}
 	return ans
+}
+
+func parseGameIdAndGames(input string) (gameId int, games []string) {
+	inputSplit := strings.Split(input, ":")
+
+	gameId = parseGameId(inputSplit[0])
+	games = parseGames(inputSplit[1])
+	return gameId, games
+}
+
+func parseGameId(input string) (ans int) {
+	return cast.ToInt(strings.ReplaceAll(input, "Game ", ""))
+}
+
+func parseGames(input string) (ans []string) {
+	return strings.Split(input, ";")
+}
+
+func parseGame(input string) (ans []string) {
+	return strings.Split(input, ",")
+}
+
+func generateMaxCountMap(games []string) (maxCount map[string]int) {
+	maxCount = make(map[string]int)
+	maxCount["red"] = 0
+	maxCount["green"] = 0
+	maxCount["blue"] = 0
+	for _, line := range games {
+		games := parseGame(line)
+
+		for _, game := range games {
+			handSplit := strings.Split(strings.Trim(game, " "), " ")
+			color := handSplit[1]
+			count := cast.ToInt(handSplit[0])
+
+			if count > maxCount[color] {
+				maxCount[color] = count
+			}
+		}
+	}
+	return maxCount
 }
