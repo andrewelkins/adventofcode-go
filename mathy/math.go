@@ -72,4 +72,12 @@ func Reverse(s string) (result string) {
 	  result = string(v) + result
 	}
 	return 
-  }
+}
+
+func MakeRange(min, max int) []int {
+    a := make([]int, max-min+1)
+    for i := range a {
+        a[i] = min + i
+    }
+    return a
+}

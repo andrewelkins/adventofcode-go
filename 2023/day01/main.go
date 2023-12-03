@@ -94,4 +94,3 @@ func parseInput(input string) (ans []string) {
 	}
 	return ans
 }
-

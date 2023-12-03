@@ -49,9 +49,9 @@ func part2(input string) int {
 	return 0
 }
 
-func parseInput(input string) (ans []int) {
+func parseInput(input string) (ans []string) {
 	for _, line := range strings.Split(input, "\n") {
-		ans = append(ans, cast.ToInt(line))
+		ans = append(ans, line)
 	}
 	return ans
 }
