@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/andrewelkins/adventofcode-go/cast"
+	"github.com/andrewelkins/adventofcode-go/data-structures/slice"
 	"github.com/andrewelkins/adventofcode-go/mathy"
 	"github.com/andrewelkins/adventofcode-go/util"
 )
@@ -48,6 +49,7 @@ func part1(input string) int {
 
 	prizeMoney := 0
 
+	// Make a map of the winner values
 	for _, x := range winnerCount {
 		if x == 1 {
 			winnerValue[cast.ToString(1)] = 1
@@ -65,7 +67,7 @@ func part1(input string) int {
 		gameString := winnersAndGame[1]
 		winners := strings.Split(winnersString, " ")
 		game := strings.Split(gameString, " ")
-		winningNumbers := IntersectionStrings(winners, game)
+		winningNumbers := slice.IntersectionStrings(winners, game)
 		fmt.Println("winningNumbers", winningNumbers)
 		prizeMoney += winnerValue[cast.ToString(len(winningNumbers)-1)]
 		fmt.Println("prizeMoney", prizeMoney)
@@ -76,30 +78,12 @@ func part1(input string) int {
 
 func part2(input string) int {
 	parsed := parseInput(input)
-	var winnerCalcValue map[string]int
-	winnerCalcValue = make(map[string]int)
-	winnerCalcValue["1"] = 1
-	_ = winnerCalcValue
-	var winnerValue map[string]int
-	winnerValue = make(map[string]int)
-	winnerValue["0"] = 0
-	winnerValue["1"] = 1
-	winnerCount := mathy.MakeRange(1, 225)
+	prizeMoney := 0
+	winnerCalcValue := make(map[string]int)
 	winnerValueRange := mathy.MakeRange(1, len(parsed))
 	for _, x := range winnerValueRange {
 		winnerCalcValue[cast.ToString(x)] = 1
 	}
-
-	prizeMoney := 0
-
-	for _, x := range winnerCount {
-		if x == 1 {
-			winnerValue[cast.ToString(1)] = 1
-			continue
-		}
-		winnerValue[cast.ToString(x)] = winnerValue[cast.ToString(x-1)] * 2
-	}
-	fmt.Println("winnerValue",winnerValue)
 
 	for x, line := range parsed {
 		cardAndGames := strings.Split(line, ":")
@@ -109,7 +93,7 @@ func part2(input string) int {
 		gameString := winnersAndGame[1]
 		winners := strings.Split(winnersString, " ")
 		game := strings.Split(gameString, " ")
-		winningNumbers := IntersectionStrings(winners, game)
+		winningNumbers := slice.IntersectionStrings(winners, game)
 		winningNumberRange := mathy.MakeRange(1, len(winningNumbers)-1)
 		for _, winningNumber := range winningNumberRange {	
 			winnerCalcValue[cast.ToString(x+1+winningNumber)] += 1 * winnerCalcValue[cast.ToString(x+1)]
@@ -127,17 +111,17 @@ func parseInput(input string) (ans []string) {
 	return ans
 }
 
-func IntersectionStrings(sli1, sli2 []string) []string {
-	var result []string
-	seen := map[string]bool{}
-	for _, v := range sli1 {
-		seen[v] = true
-	}
-	for _, v := range sli2 {
-		if seen[v] {
-			result = append(result, v)
-			delete(seen, v)
-		}
-	}
-	return result
-}
+// func IntersectionStrings(slice1, slice2 []string) []string {
+// 	var result []string
+// 	seen := map[string]bool{}
+// 	for _, v := range slice1 {
+// 		seen[v] = true
+// 	}
+// 	for _, v := range slice2 {
+// 		if seen[v] {
+// 			result = append(result, v)
+// 			delete(seen, v)
+// 		}
+// 	}
+// 	return result
+// }
