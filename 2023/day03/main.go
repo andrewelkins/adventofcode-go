@@ -55,7 +55,6 @@ func part1(input string) int {
 	numbersAndGears = make(map[string][]int)
 
 	// TIL substring in golang returns the ascii code of the character
-	// fmt.Println("parsed", string(parsed[0][2]))
 
 	for y, line := range parsed {
 		// Find matches for numbers
@@ -68,13 +67,8 @@ func part1(input string) int {
 			xRight := numberGearsIndexes[i][1]
 			matchNum := cast.ToInt(match)
 			if matchNeightbors(y-1, xLeft, y+1, xRight, matchNum, parsed) {
-				// numCastInt := cast.ToInt(match)
-				// fmt.Println("MATCH numSum", numCastInt)
     			numSum += cast.ToInt(match)
-			} else {
-				// numCastInt := cast.ToInt(match)
-				// fmt.Println("NO MATCH numSum", numCastInt)
-			}
+			} 
 		}
 	}
 	return numSum
@@ -103,8 +97,6 @@ func part2(input string) int {
 		}
 	}
 	for key, value := range numbersAndGears {
-		fmt.Println("key", key)
-		fmt.Println("value", value)
 		if len(value) == 2 {
 			gearSum += value[0] * value[1]
 		}
@@ -152,15 +144,10 @@ func removeDuplicate[T string | int](sliceList []T) []T {
 func matchNeightbors(yAbove int, xLeft int, yBelow int, xRight int, number int, board []string) bool {
 
 	yRange := mathy.MakeRange(yAbove, yBelow)
-	fmt.Println("yRange", yRange) 
 	for _, y := range yRange {
-		fmt.Println("y", y)
 		xRange := mathy.MakeRange(xLeft, xRight)
-		fmt.Println("xRange", xRange)
 		for _, x := range xRange {
-			fmt.Println("x", x)
 			if y >= 0 && y < len(board) && x >= 0 && x < len(board[y]) {
-				fmt.Println("board[y][x]", string(board[y][x]))
 				if !strings.Contains("0123456789.", string(board[y][x])) {
 					if strings.Contains("*", string(board[y][x])) {
 						numKey := "y" + strconv.Itoa(y) + "x" + strconv.Itoa(x)
