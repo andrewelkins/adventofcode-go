@@ -59,12 +59,12 @@ func part1(input string) int {
 	for y, line := range parsed {
 		// Find matches for numbers
 		t := re.FindAllString(line, -1)
-		numberGearsIndexes := re.FindAllStringSubmatchIndex(line, -1)
-		fmt.Println(numberGearsIndexes)
+		numberIndexes := re.FindAllStringSubmatchIndex(line, -1)
+		fmt.Println(numberIndexes)
 		for i, match := range t {
 			// match neightbors y above, x left, y below, x right
-			xLeft := numberGearsIndexes[i][0]-1
-			xRight := numberGearsIndexes[i][1]
+			xLeft := numberIndexes[i][0]-1
+			xRight := numberIndexes[i][1]
 			matchNum := cast.ToInt(match)
 			if matchNeightbors(y-1, xLeft, y+1, xRight, matchNum, parsed) {
     			numSum += cast.ToInt(match)
@@ -84,19 +84,19 @@ func part2(input string) int {
 	for y, line := range parsed {
 		// Find matches for numbers
 		t := re.FindAllString(line, -1)
-		numberGearsIndexes := re.FindAllStringSubmatchIndex(line, -1)
-		fmt.Println(numberGearsIndexes)
+		numberIndexes := re.FindAllStringSubmatchIndex(line, -1)
+		fmt.Println(numberIndexes)
 		for i, match := range t {
 			// match neightbors y above, x left, y below, x right
-			xLeft := numberGearsIndexes[i][0]-1
-			xRight := numberGearsIndexes[i][1]
+			xLeft := numberIndexes[i][0]-1
+			xRight := numberIndexes[i][1]
 			matchNum := cast.ToInt(match)
 			if matchNeightbors(y-1, xLeft, y+1, xRight, matchNum, parsed) {
     			numSum += cast.ToInt(match)
 			}
 		}
 	}
-	for key, value := range numbersAndGears {
+	for _, value := range numbersAndGears {
 		if len(value) == 2 {
 			gearSum += value[0] * value[1]
 		}
