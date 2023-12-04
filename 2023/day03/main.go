@@ -81,7 +81,35 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	numSum := 0
+	gearSum := 0
+	re := regexp.MustCompile("\\d+")
+	numbersAndGears = make(map[string][]int)
+
+	for y, line := range parsed {
+		// Find matches for numbers
+		t := re.FindAllString(line, -1)
+		numberGearsIndexes := re.FindAllStringSubmatchIndex(line, -1)
+		fmt.Println(numberGearsIndexes)
+		for i, match := range t {
+			// match neightbors y above, x left, y below, x right
+			xLeft := numberGearsIndexes[i][0]-1
+			xRight := numberGearsIndexes[i][1]
+			matchNum := cast.ToInt(match)
+			if matchNeightbors(y-1, xLeft, y+1, xRight, matchNum, parsed) {
+    			numSum += cast.ToInt(match)
+			}
+		}
+	}
+	for key, value := range numbersAndGears {
+		fmt.Println("key", key)
+		fmt.Println("value", value)
+		if len(value) == 2 {
+			gearSum += value[0] * value[1]
+		}
+	}
+	return gearSum
 }
 
 func parseInput(input string) (ans []string) {
@@ -123,8 +151,6 @@ func removeDuplicate[T string | int](sliceList []T) []T {
 
 func matchNeightbors(yAbove int, xLeft int, yBelow int, xRight int, number int, board []string) bool {
 
-	// specialCharacters := []string{"*", "=", "/", "%", "#", "&", "$", "-", "@", "+"}
-	// specialCharacters := "*=/%#&-@+"
 	yRange := mathy.MakeRange(yAbove, yBelow)
 	fmt.Println("yRange", yRange) 
 	for _, y := range yRange {
