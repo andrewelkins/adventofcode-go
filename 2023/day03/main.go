@@ -18,7 +18,7 @@ import (
 //go:embed input.txt
 var input string
 
-var numbersAndGears map[string]int
+var numbersAndGears map[string][]int
 
 var board []string
 
@@ -52,7 +52,7 @@ func part1(input string) int {
 	parsed := parseInput(input)
 	numSum := 0
 	re := regexp.MustCompile("\\d+")
-	numbersAndGears = make(map[string]int)
+	numbersAndGears = make(map[string][]int)
 
 	// TIL substring in golang returns the ascii code of the character
 	// fmt.Println("parsed", string(parsed[0][2]))
@@ -138,7 +138,7 @@ func matchNeightbors(yAbove int, xLeft int, yBelow int, xRight int, number int, 
 				if !strings.Contains("0123456789.", string(board[y][x])) {
 					if strings.Contains("*", string(board[y][x])) {
 						numKey := "y" + strconv.Itoa(y) + "x" + strconv.Itoa(x)
-						numbersAndGears[numKey] = number
+						numbersAndGears[numKey] = append(numbersAndGears[numKey], number)
 					}
 					return true
 				}
