@@ -75,7 +75,60 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	var winnerCalcValue map[string]int
+	winnerCalcValue = make(map[string]int)
+	winnerCalcValue["1"] = 1
+	_ = winnerCalcValue
+	var winnerValue map[string]int
+	winnerValue = make(map[string]int)
+	winnerValue["0"] = 0
+	winnerValue["1"] = 1
+	winnerCount := mathy.MakeRange(1, 225)
+	winnerValueRange := mathy.MakeRange(1, len(parsed))
+	for _, x := range winnerValueRange {
+		winnerCalcValue[cast.ToString(x)] = 1
+	}
+
+	prizeMoney := 0
+
+	for _, x := range winnerCount {
+		if x == 1 {
+			winnerValue[cast.ToString(1)] = 1
+			continue
+		}
+		winnerValue[cast.ToString(x)] = winnerValue[cast.ToString(x-1)] * 2
+	}
+	fmt.Println("winnerValue",winnerValue)
+
+	for x, line := range parsed {
+		fmt.Println("x", x)
+		cardAndGames := strings.Split(line, ":")
+		games := cardAndGames[1]
+		winnersAndGame := strings.Split(games, "|")
+		winnersString := winnersAndGame[0]
+		gameString := winnersAndGame[1]
+		winners := strings.Split(winnersString, " ")
+		game := strings.Split(gameString, " ")
+		winningNumbers := IntersectionStrings(winners, game)
+		fmt.Println("winningNumbers", winningNumbers)
+		winningNumberRange := mathy.MakeRange(1, len(winningNumbers)-1)
+		fmt.Println("winningNumberRange", winningNumberRange)
+		for _, winningNumber := range winningNumberRange {	
+			nn := cast.ToString(x+1+winningNumber)
+			// fmt.Println("nn", nn)
+			if winnerCalcValue[nn] == 0 {
+				winnerCalcValue[nn] = 1
+			}
+			winnerCalcValue[nn] += 1 * winnerCalcValue[cast.ToString(x+1)]
+		}
+		fmt.Println("winnerCalcValue", winnerCalcValue)
+		fmt.Println("winnerCalcValue[cast.ToString(x+1)]", winnerCalcValue[cast.ToString(x+1)])
+		prizeMoney += winnerCalcValue[cast.ToString(x+1)]
+		fmt.Println("prizeMoney", prizeMoney)
+	}
+
+	return prizeMoney
 }
 
 func parseInput(input string) (ans []string) {
