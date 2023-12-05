@@ -63,7 +63,7 @@ func part1(input string) int {
 
 func part2(input string) int {
 	parsed := parseInput(input)
-	seeds := getSeeds(parsed[0])
+	seeds := getSeedMultipliers(getSeeds(parsed[0]))
 	board := buildMap(parsed[1:])
 	location := 0
 
@@ -96,6 +96,18 @@ func getSeeds(input string) (board []int) {
 	for _, seed := range strings.Split(input, " ")[1:] {
 		seeds = append(seeds, cast.ToInt(seed))
 	}
+	return seeds
+}
+
+func getSeedMultipliers(input []int) (seeds []int) {
+
+	for x, seed := range input {
+		if x %2 == 0 {
+			for _, y := range mathy.MakeRange(x, x+seed[x+1]) {
+				seeds = append(seeds, seed*y)
+			}
+			seeds = append(seeds, x)
+		} 
 	return seeds
 }
 
