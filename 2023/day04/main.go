@@ -45,12 +45,10 @@ func part1(input string) int {
 	var winnerValue map[string]int
 	winnerValue = make(map[string]int)
 	winnerValue["0"] = 0
-	winnerCount := mathy.MakeRange(1, 25)
-
 	prizeMoney := 0
 
 	// Make a map of the winner values
-	for _, x := range winnerCount {
+	for _, x := range mathy.MakeRange(1, 25) {
 		if x == 1 {
 			winnerValue[cast.ToString(1)] = 1
 			continue
@@ -68,7 +66,6 @@ func part1(input string) int {
 		winners := strings.Split(winnersString, " ")
 		game := strings.Split(gameString, " ")
 		winningNumbers := slice.IntersectionStrings(winners, game)
-		fmt.Println("winningNumbers", winningNumbers)
 		prizeMoney += winnerValue[cast.ToString(len(winningNumbers)-1)]
 		fmt.Println("prizeMoney", prizeMoney)
 	}
@@ -79,9 +76,9 @@ func part1(input string) int {
 func part2(input string) int {
 	parsed := parseInput(input)
 	prizeMoney := 0
-	winnerCalcValue := make(map[string]int)
-	winnerValueRange := mathy.MakeRange(1, len(parsed))
-	for _, x := range winnerValueRange {
+	winnerCalcValue := make(	)
+
+	for _, x := range mathy.MakeRange(1, len(parsed)) {
 		winnerCalcValue[cast.ToString(x)] = 1
 	}
 
@@ -94,8 +91,7 @@ func part2(input string) int {
 		winners := strings.Split(winnersString, " ")
 		game := strings.Split(gameString, " ")
 		winningNumbers := slice.IntersectionStrings(winners, game)
-		winningNumberRange := mathy.MakeRange(1, len(winningNumbers)-1)
-		for _, winningNumber := range winningNumberRange {	
+		for _, winningNumber := range mathy.MakeRange(1, len(winningNumbers)-1) {	
 			winnerCalcValue[cast.ToString(x+1+winningNumber)] += 1 * winnerCalcValue[cast.ToString(x+1)]
 		}
 		prizeMoney += winnerCalcValue[cast.ToString(x+1)]
@@ -110,18 +106,3 @@ func parseInput(input string) (ans []string) {
 	}
 	return ans
 }
-
-// func IntersectionStrings(slice1, slice2 []string) []string {
-// 	var result []string
-// 	seen := map[string]bool{}
-// 	for _, v := range slice1 {
-// 		seen[v] = true
-// 	}
-// 	for _, v := range slice2 {
-// 		if seen[v] {
-// 			result = append(result, v)
-// 			delete(seen, v)
-// 		}
-// 	}
-// 	return result
-// }
