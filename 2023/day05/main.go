@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/andrewelkins/adventofcode-go/cast"
+	"github.com/andrewelkins/adventofcode-go/mathy"
 	"github.com/andrewelkins/adventofcode-go/util"
 )
 
@@ -103,10 +104,9 @@ func getSeedMultipliers(input []int) (seeds []int) {
 
 	for x, seed := range input {
 		if x %2 == 0 {
-			for _, y := range mathy.MakeRange(x, x+seed[x+1]) {
-				seeds = append(seeds, seed*y)
+			for _, y := range mathy.MakeRange(seed, seed+input[x+1]) {
+				seeds = append(seeds, y)
 			}
-			seeds = append(seeds, x)
 		} 
 	}
 	return seeds
