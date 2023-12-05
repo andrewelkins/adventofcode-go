@@ -108,6 +108,7 @@ func getSeedMultipliers(input []int) (seeds []int) {
 			}
 			seeds = append(seeds, x)
 		} 
+	}
 	return seeds
 }
 
