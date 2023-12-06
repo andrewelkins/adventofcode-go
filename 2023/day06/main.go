@@ -65,20 +65,9 @@ func part1(input string) int {
 func part2(input string) int {
 	parsed := parseInput(input)
 
-	re := regexp.MustCompile("\\d+")
-	times := re.FindAllString(parsed[0], -1)
-	distances := re.FindAllString(parsed[1], -1)
+	time := cast.ToInt(strings.ReplaceAll(strings.Split(parsed[0], ":")[1], " ", ""))
+	distance := cast.ToInt(strings.ReplaceAll(strings.Split(parsed[1], ":")[1], " ", ""))
 	win := 0
-	t := ""
-	d := ""
-
-	for x, time := range times {
-		t = t + time
-		d = d + distances[x]
-	}
-
-	time := cast.ToInt(t)
-	distance := cast.ToInt(d)
 
 	for i := 0; i < time; i++ {
 		if i * (time-i) > distance {
