@@ -69,10 +69,10 @@ func part2(input string) int {
 	time := cast.ToFloat(strings.ReplaceAll(strings.Split(parsed[0], ":")[1], " ", ""))
 	distance := cast.ToFloat(strings.ReplaceAll(strings.Split(parsed[1], ":")[1], " ", "")) + 1
 
-    low := math.Floor((time + math.Sqrt(math.Pow(time, 2) - 4 * distance))/2)
-    high := math.Ceil((time - math.Sqrt(math.Pow(time, 2) - 4 * distance))/2)
+	low := math.Floor((time + math.Sqrt(math.Pow(time, 2) - 4 * distance))/2)
+	high := math.Ceil((time - math.Sqrt(math.Pow(time, 2) - 4 * distance))/2)
 
-    return int(low - high + 1)
+	return int(low - high + 1)
 }
 
 func parseInput(input string) (ans []string) {
