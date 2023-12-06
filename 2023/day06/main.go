@@ -72,7 +72,7 @@ func part2(input string) int {
 	low := math.Floor((time + math.Sqrt(math.Pow(time, 2) - 4 * distance))/2)
 	high := math.Ceil((time - math.Sqrt(math.Pow(time, 2) - 4 * distance))/2)
 
-	return int(low - high + 1)
+	return int(high - low - 1)
 }
 
 func parseInput(input string) (ans []string) {
