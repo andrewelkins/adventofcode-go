@@ -26,6 +26,26 @@ func ToInt(arg interface{}) int {
 	return val
 }
 
+
+
+// ToFloat will case a given arg into an float type.
+// Supported types are:
+//    - string
+func ToFloat(arg interface{}) float64 {
+	var val float64
+	switch arg.(type) {
+	case string:
+		var err error
+		val, err = strconv.ParseFloat(arg.(string), 64)
+		if err != nil {
+			panic("error converting string to int " + err.Error())
+		}
+	default:
+		panic(fmt.Sprintf("unhandled type for int casting %T", arg))
+	}
+	return val
+}
+
 // ToString will case a given arg into an int type.
 // Supported types are:
 //    - int
