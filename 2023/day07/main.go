@@ -75,14 +75,10 @@ func part2(input string) int {
 		lineSplit := strings.Split(line, " ")
 		hand := strings.Map(rules, lineSplit[0])
 		handValue := NewStringSet(strings.Split(hand, ""))
-		cc := cast.ToString(cardType(handValue))+" "+hand + " " + lineSplit[1]
-		fmt.Println(cc)
-		handsGrouped = append(handsGrouped, cc)
+		handsGrouped = append(handsGrouped, cast.ToString(cardType(handValue))+" "+hand + " " + lineSplit[1])
 	}
 
 	sort.Sort(sort.StringSlice(handsGrouped))
-
-	fmt.Println(handsGrouped)
 
 	for x, line := range handsGrouped {
 		lineSplit := strings.Split(line, " ")
@@ -160,11 +156,9 @@ func cardType(hand StringSet) int {
 		if len(handLength) != 1 {
 			if len(handLength) == 4 {
 				max = 3
-			} else if len(handLength) == 3{
+			} else if len(handLength) == 3 || len(handLength) == 2{
 				max += 1
-			} else if len(handLength) == 2{
-				max += 1
-			}
+			} 
 			handLength = handLength[:len(handLength)-1]
 		}
 	}
