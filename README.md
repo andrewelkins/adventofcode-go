@@ -2,6 +2,8 @@
 ### Requirements
 Go 1.16+ is required because [embed][embed] is used for input files.
 
+`brew install golang`
+
 Use `go run main.go -part <1 or 2>` will be usable to run the actual inputs for that day.
 
 Use `go test -run RegExpToMatchFunctionNames .` to run examples and unit tests via the `main_test.go` files.

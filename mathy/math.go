@@ -81,3 +81,10 @@ func MakeRange(min, max int) []int {
     }
     return a
 }
+
+func absDiffInt(x, y int) int {
+	if x < y {
+	   return y - x
+	}
+	return x - y
+ }
