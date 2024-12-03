@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+    "regexp"
 
 	"github.com/andrewelkins/adventofcode-go/cast"
 	"github.com/andrewelkins/adventofcode-go/util"
@@ -41,12 +42,40 @@ func main() {
 func part1(input string) int {
 	parsed := parseInput(input)
 	_ = parsed
+	var fullline = strings.Join(parsed, "")
+	var count int = 0
+	re := regexp.MustCompile(`mul\(\d+,\d+\)`) // matches mul(1,2)
+	reSingle := regexp.MustCompile(`\d+`) // matches 1,2
 
-	return 0
+	matches := re.FindAllString(fullline, -1)
+	
+	for _, match := range matches {
+		digits := reSingle.FindAllString(match, -1)
+		count += cast.ToInt(digits[0]) * cast.ToInt(digits[1])
+	}
+
+	return count
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	_ = parsed
+	var fullline = strings.Join(parsed, "")
+	var count int = 0
+	reStrip := regexp.MustCompile(`don't\(\)(.*?)do\(\)`) // Capture dont()...do()
+	reStripEnd := regexp.MustCompile(`don't\(\)(.*)(?:do\(\))*`) // Remove ending don't to end of line
+	re := regexp.MustCompile(`mul\(\d+,\d+\)`) // matches mul(1,2)
+	reSingle := regexp.MustCompile(`\d+`) // matches 1,2
+
+	fulllineCleaned := reStripEnd.ReplaceAllString(reStrip.ReplaceAllString(fullline, ""),"")
+	matches := re.FindAllString(fulllineCleaned, -1)
+	
+	for _, match := range matches {
+		digits := reSingle.FindAllString(match, -1)
+		count += cast.ToInt(digits[0]) * cast.ToInt(digits[1])
+	}
+
+	return count
 }
 
 func parseInput(input string) (ans []string) {
