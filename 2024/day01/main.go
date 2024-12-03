@@ -9,6 +9,7 @@ import (
 
 	"github.com/andrewelkins/adventofcode-go/cast"
 	"github.com/andrewelkins/adventofcode-go/util"
+	"github.com/andrewelkins/adventofcode-go/data-structures/set"
 )
 
 //go:embed input.txt
@@ -64,7 +65,38 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	_ = parsed
+
+	var leftValues []int
+	var rightValues []int
+	var totals = map[int]int{}
+	var max int
+
+	for _, line := range parsed {
+		parts := strings.Split(line, "   ")
+		leftValues = append(leftValues, cast.ToInt(parts[0]))
+		rightValues = append(rightValues, cast.ToInt(parts[1]))
+	}
+
+	uniqueValues := set.NewIntSet(leftValues)
+
+	for _, v := range rightValues {
+		if uniqueValues.Has(v) {
+			_, ok := totals[v]
+			if ok {
+				totals[v] += 1
+			} else {
+				totals[v] = 1
+			}
+		}
+	}
+
+    for k, v := range totals {
+        max += k * v
+    }
+
+	return max
 }
 
 func parseInput(input string) (ans []string) {
