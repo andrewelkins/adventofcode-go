@@ -104,8 +104,6 @@ func part2(input string) int {
 		xmasGrid[i] = line
 	}
 
-	// on the line look for X search forward, down, and diagonally down for XMAS
-	// on the line look for S search forward, down, and diagonally down for SMAX
 	for y, line := range xmasGrid {
 		for x, char := range line {
 			if cast.ToString(char) == "A" {
