@@ -53,38 +53,33 @@ func part1(input string) int {
 	for y, line := range xmasGrid {
 		for x, char := range line {
 			if cast.ToString(char) == "X" {
-				// search forward
-				if gridGet(xmasGrid, x+1, y) == "M" && gridGet(xmasGrid, x+2, y) == "A" && gridGet(xmasGrid, x+3, y) == "S" {
+				searchString := "MAS"
+				if forwardSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
-				// search down
-				if gridGet(xmasGrid, x, y+1) == "M" && gridGet(xmasGrid, x, y+2) == "A" && gridGet(xmasGrid, x, y+3) == "S" {
+				if downSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
-				// search diagonally down right
-				if gridGet(xmasGrid, x+1, y+1) == "M" && gridGet(xmasGrid, x+2, y+2) == "A" && gridGet(xmasGrid, x+3, y+3) == "S" {
+				if diaRightSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
-				// search diagonally down left
-				if gridGet(xmasGrid, x-1, y+1) == "M" && gridGet(xmasGrid, x-2, y+2) == "A" && gridGet(xmasGrid, x-3, y+3) == "S" {
+				if diaLeftSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
 			}
 			if cast.ToString(char) == "S" {
+				searchString := "AMX"
 				// search forward
-				if gridGet(xmasGrid, x+1, y) == "A" && gridGet(xmasGrid, x+2, y) == "M" && gridGet(xmasGrid, x+3, y) == "X" {
+				if forwardSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
-				// search down
-				if gridGet(xmasGrid, x, y+1) == "A" && gridGet(xmasGrid, x, y+2) == "M" && gridGet(xmasGrid, x, y+3) == "X" {
+				if downSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
-				// search diagonally down right
-				if gridGet(xmasGrid, x+1, y+1) == "A" && gridGet(xmasGrid, x+2, y+2) == "M" && gridGet(xmasGrid, x+3, y+3) == "X" {
+				if diaRightSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
-				// search diagonally down left
-				if gridGet(xmasGrid, x-1, y+1) == "A" && gridGet(xmasGrid, x-2, y+2) == "M" && gridGet(xmasGrid, x-3, y+3) == "X" {
+				if diaLeftSearch(xmasGrid, x, y, searchString) {
 					count++
 				}
 			}
@@ -144,3 +139,30 @@ func gridGet(grid map[int]string, x int, y int) string {
     return cast.ToString(grid[y][x])
 }
     
+func forwardSearch(xmasGrid map[int]string, x int, y int, search string) bool {
+	if gridGet(xmasGrid, x+1, y) == cast.ToString(search[0]) && gridGet(xmasGrid, x+2, y) == cast.ToString(search[1]) && gridGet(xmasGrid, x+3, y) == cast.ToString(search[2]) {
+		return true
+	}
+	return false
+}
+
+func downSearch(xmasGrid map[int]string, x int, y int, search string) bool {
+	if gridGet(xmasGrid, x, y+1) == cast.ToString(search[0]) && gridGet(xmasGrid, x, y+2) == cast.ToString(search[1]) && gridGet(xmasGrid, x, y+3) == cast.ToString(search[2]) {
+		return true
+	}
+	return false
+}
+
+func diaRightSearch(xmasGrid map[int]string, x int, y int, search string) bool {
+	if gridGet(xmasGrid, x+1, y+1) == cast.ToString(search[0]) && gridGet(xmasGrid, x+2, y+2) == cast.ToString(search[1]) && gridGet(xmasGrid, x+3, y+3) == cast.ToString(search[2]) {
+		return true
+	}
+	return false
+}
+
+func diaLeftSearch(xmasGrid map[int]string, x int, y int, search string) bool {
+	if gridGet(xmasGrid, x-1, y+1) == cast.ToString(search[0]) && gridGet(xmasGrid, x-2, y+2) == cast.ToString(search[1]) && gridGet(xmasGrid, x-3, y+3) == cast.ToString(search[2]) {
+		return true
+	}
+	return false
+}
