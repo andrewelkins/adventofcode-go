@@ -48,40 +48,13 @@ func part1(input string) int {
 		xmasGrid[i] = line
 	}
 
-	// on the line look for X search forward, down, and diagonally down for XMAS
-	// on the line look for S search forward, down, and diagonally down for SMAX
 	for y, line := range xmasGrid {
 		for x, char := range line {
 			if cast.ToString(char) == "X" {
-				searchString := "MAS"
-				if forwardSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
-				if downSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
-				if diaRightSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
-				if diaLeftSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
+				count += gridSearch(xmasGrid, x, y, "MAS")
 			}
 			if cast.ToString(char) == "S" {
-				searchString := "AMX"
-				// search forward
-				if forwardSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
-				if downSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
-				if diaRightSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
-				if diaLeftSearch(xmasGrid, x, y, searchString) {
-					count++
-				}
+				count += gridSearch(xmasGrid, x, y, "AMX")
 			}
 		}
 	}
@@ -165,4 +138,21 @@ func diaLeftSearch(xmasGrid map[int]string, x int, y int, search string) bool {
 		return true
 	}
 	return false
+}
+
+func gridSearch(xmasGrid map[int]string, x int, y int, search string) int {
+	var count int = 0
+	if forwardSearch(xmasGrid, x, y, search) {
+		count++
+	}
+	if downSearch(xmasGrid, x, y, search) {
+		count++
+	}
+	if diaRightSearch(xmasGrid, x, y, search) {
+		count++
+	}
+	if diaLeftSearch(xmasGrid, x, y, search) {
+		count++
+	}
+	return count
 }

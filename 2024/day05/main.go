@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	_ "embed"
 	"flag"
 	"fmt"
+	"os"
+	"slices"
 	"strings"
 
 	"github.com/andrewelkins/adventofcode-go/cast"
@@ -27,31 +30,120 @@ func main() {
 	flag.Parse()
 	fmt.Println("Running part", part)
 
+	parsedInput := parseInput(input)
 	if part == 1 {
-		ans := part1(input)
+		ans := part1(parsedInput)
 		util.CopyToClipboard(fmt.Sprintf("%v", ans))
 		fmt.Println("Output:", ans)
 	} else {
-		ans := part2(input)
+		ans := part2(parsedInput)
 		util.CopyToClipboard(fmt.Sprintf("%v", ans))
 		fmt.Println("Output:", ans)
 	}
 }
 
-func part1(input string) int {
-	parsed := parseInput(input)
-	_ = parsed
+func part1(input []string) int {
+	// Going to try scanner. Thanks Ben!
+	inputFile, _ := os.Open("input.txt")
+	var rules = []string{}
+	var pages = []string{}
+	var sumMiddleNumbers int = 0
 
-	return 0
+	defer inputFile.Close()
+	scanner := bufio.NewScanner(inputFile)
+
+	for scanner.Scan() {
+		if scanner.Text() == "" {
+			break
+		}
+		rules = append(rules, scanner.Text())
+	}
+	for scanner.Scan() {
+		pages = append(pages, scanner.Text())
+	}
+
+	for _, page := range pages {
+		pageArray := strings.Split(page, ",")
+		if validateRules(pageArray, rules) {
+			middleNumber := cast.ToInt(pageArray[len(pageArray)/2])
+			sumMiddleNumbers += middleNumber
+		}
+	}
+
+	return sumMiddleNumbers
 }
 
-func part2(input string) int {
-	return 0
+func part2(input []string) int {
+	inputFile, _ := os.Open("input.txt")
+	var rules = []string{}
+	var pages = []string{}
+	var sumMiddleNumbers int = 0
+	// incorrectOrderedPages := [][]string{}
+
+	defer inputFile.Close()
+	scanner := bufio.NewScanner(inputFile)
+
+	for scanner.Scan() {
+		if scanner.Text() == "" {
+			break
+		}
+		rules = append(rules, scanner.Text())
+	}
+	for scanner.Scan() {
+		pages = append(pages, scanner.Text())
+	}
+
+	for _, page := range pages {
+		pageArray := strings.Split(page, ",")
+		if !validateRules(pageArray, rules) {
+			orderedPages := reorderPages(pageArray, rules)
+			middleNumber := cast.ToInt(orderedPages[len(orderedPages)/2])
+			sumMiddleNumbers += middleNumber
+		}
+	}
+
+	return sumMiddleNumbers
 }
 
 func parseInput(input string) (ans []string) {
-	for _, line := range strings.Split(input, "\n") {
-		ans = append(ans, line)
-	}
+	ans = append(ans, strings.Split(input, "\n")...)
 	return ans
+}
+
+func validateRules(pages []string, rules []string) bool {
+	for _, rule := range rules {
+		var rs []string = strings.Split(rule, "|")
+		var indexBefore int = indexOf(pages, rs[0])
+		var indexAfter int = indexOf(pages, rs[1])
+		// If the rule is not in the correct order, return false
+		if indexAfter != -1 && indexBefore > indexAfter {
+			return false
+		}
+	}
+	return true
+}
+
+func indexOf(haystack []string, needle string) int {
+	for i, v := range haystack {
+		if v == needle {
+			return i
+		}
+	}
+	return -1
+}
+
+func reorderPages(pages []string, rules []string) []string {
+	// Process rule by rule until all rules are satisfied :( Brute force! Do .. while
+	for !validateRules(pages, rules) {
+		for _, rule := range rules {
+			var rs []string = strings.Split(rule, "|")
+			var indexBefore int = indexOf(pages, rs[0])
+			var indexAfter int = indexOf(pages, rs[1])
+			if indexAfter != -1 && indexBefore > indexAfter {
+				pages = slices.Replace(pages, indexBefore, indexBefore+1, rs[1])
+				pages = slices.Replace(pages, indexAfter, indexAfter+1, rs[0])
+			}
+		}
+	}
+	return pages
 }
