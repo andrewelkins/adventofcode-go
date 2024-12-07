@@ -13,6 +13,8 @@ import (
 //go:embed input.txt
 var input string
 
+var preventRecursion = 0
+
 func init() {
 	// do this in init (not main) so test file has same input
 	input = strings.TrimRight(input, "\n")
@@ -162,7 +164,156 @@ func part1(input string) int {
 
 func part2(input string) int {
 
-	return 0
+	start := time.Now()
+
+	parsed := parseInput(input)
+	_ = parsed
+	var do bool = true
+	lab := make(map[int][]string)
+	cursor := [2]int{0, 0}
+	circle := 1
+
+	for i, line := range parsed {
+		lab[i] = strings.Split(line, "")
+		start := indexOf(lab[i], "^") // ^ > v <  u l r d
+		if start != -1 && cursor[0] == 0 {
+			cursor = [2]int{i, start}
+		}
+	}
+	startPosition := cursor
+	uniqueSpots := make(map[string]bool)
+
+	for do {
+		preventRecursion = 0
+		if !cursorCheck(lab, cursor) {
+			do = false
+			break
+		}
+		circleCursor := cursor
+		circleLab := lab
+		switch lab[cursor[0]][cursor[1]] {
+		case "^":
+			lab[cursor[0]][cursor[1]] = "^"
+			if lab[cursor[0]-1][cursor[1]] == "#" {
+				cursor[1]++
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+					lab[cursor[0]][cursor[1]] = ">"
+				}
+			} else {
+				cursor[0]--
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+					fmt.Print("cursorLAB", circleCursor, "\n")
+					circleLab[cursor[0]][cursor[1]] = "O"
+					if cursorMove(circleLab, circleCursor, ">") {
+						uniqueSpots[fmt.Sprintf("%v", cursor)] = true
+						if startPosition != cursor {
+							circle++
+						}
+					}
+					lab[cursor[0]][cursor[1]] = "^"
+				}
+			}
+		case ">":
+			lab[cursor[0]][cursor[1]] = ">"
+			if lab[cursor[0]][cursor[1]+1] == "#" {
+				cursor[0]++
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+					lab[cursor[0]][cursor[1]] = "v"
+				}
+			} else {
+				cursor[1]++
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+
+					fmt.Print("cursorLAB", circleCursor, "\n")
+					circleLab[cursor[0]][cursor[1]] = "O"
+					if cursorMove(circleLab, circleCursor, "v") {
+						uniqueSpots[fmt.Sprintf("%v", cursor)] = true
+						if startPosition != cursor {
+							circle++
+						}
+					}
+					lab[cursor[0]][cursor[1]] = ">"
+				}
+			}
+		case "v":
+			lab[cursor[0]][cursor[1]] = "v"
+			if cursor[0]+1 >= len(lab[cursor[0]]) {
+				do = false
+				break
+			}
+			if lab[cursor[0]+1][cursor[1]] == "#" {
+				cursor[1]--
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+					lab[cursor[0]][cursor[1]] = "<"
+				}
+			} else {
+				cursor[0]++
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+
+					fmt.Print("cursorLAB", circleCursor, "\n")
+					circleLab[cursor[0]][cursor[1]] = "O"
+					if cursorMove(circleLab, circleCursor, "<") {
+						uniqueSpots[fmt.Sprintf("%v", cursor)] = true
+						if startPosition != cursor {
+							circle++
+						}
+					}
+					lab[cursor[0]][cursor[1]] = "v"
+				}
+			}
+		case "<":
+			lab[cursor[0]][cursor[1]] = "<"
+			if lab[cursor[0]][cursor[1]-1] == "#" {
+				cursor[0]--
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+					lab[cursor[0]][cursor[1]] = "^"
+				}
+			} else {
+				cursor[1]--
+				if !cursorCheck(lab, cursor) {
+					do = false
+				} else {
+
+					fmt.Print("cursorLAB", circleCursor, "\n")
+					circleLab[cursor[0]][cursor[1]] = "O"
+					if cursorMove(circleLab, circleCursor, "^") {
+						uniqueSpots[fmt.Sprintf("%v", cursor)] = true
+						if startPosition != cursor {
+							circle++
+						}
+					}
+					lab[cursor[0]][cursor[1]] = "<"
+				}
+			}
+		default:
+			do = false
+		}
+	}
+
+	cc := 0
+	for i, _ := range uniqueSpots {
+		fmt.Print(i, "\n")
+		cc++
+	}
+
+	elapsed := time.Since(start)
+	fmt.Printf("page took %s \n", elapsed)
+	fmt.Print("circle", circle, "\n")
+	return circle
 }
 
 func parseInput(input string) (ans []string) {
@@ -186,4 +337,89 @@ func cursorCheck(lab map[int][]string, cursor [2]int) bool {
 		return false
 	}
 	return true
+}
+
+func cursorMove(lab map[int][]string, cursor [2]int, direction string) bool {
+	if preventRecursion > 1000 {
+		return false
+	}
+	preventRecursion++
+	// fmt.Println("cursorMove", direction)
+	// for i, _ := range lab[0] {
+	// 	fmt.Println(lab[i])
+	// }
+	switch direction {
+	case "^":
+		for i := cursor[0]; i >= 0; i-- {
+			y := lab[i][cursor[1]]
+			// fmt.Println("y", i, cursor[1], y)
+			if y == "O" {
+				return true
+			}
+			if y == "#" {
+				cursor[0] = i + 1
+				if lab[cursor[0]][cursor[1]+1] == "#" {
+					cursor[0]++
+					return cursorMove(lab, cursor, "v")
+				} else {
+					return cursorMove(lab, cursor, ">")
+				}
+			}
+		}
+	case ">":
+		for i := cursor[1]; i < len(lab[cursor[0]]); i++ {
+			x := lab[cursor[0]][i]
+			// fmt.Println("x", cursor[0], i, x)
+			if x == "O" {
+				return true
+			}
+			if x == "#" {
+				cursor[1] = i - 1
+				if lab[cursor[0]+1][cursor[1]] == "#" {
+					cursor[1]++
+					return cursorMove(lab, cursor, "<")
+				} else {
+					return cursorMove(lab, cursor, "v")
+				}
+			}
+		}
+	case "v":
+		for i := cursor[0]; i < len(lab); i++ {
+			y := lab[i][cursor[1]]
+			// fmt.Println("y", i, cursor[1], y)
+			if y == "O" {
+				return true
+			}
+			if y == "#" {
+				cursor[0] = i - 1
+				if lab[cursor[0]][cursor[1]-1] == "#" {
+					cursor[1]++
+					return cursorMove(lab, cursor, "v")
+				} else {
+					return cursorMove(lab, cursor, "<")
+				}
+			}
+		}
+	case "<":
+		for i := cursor[1]; i >= 0; i-- {
+			x := lab[cursor[0]][i]
+			// fmt.Println("x", cursor[0], i, x)
+			if x == "O" {
+				return true
+			}
+			if x == "#" {
+				cursor[1] = i + 1
+				if lab[cursor[0]-1][cursor[1]] == "#" {
+					cursor[0]++
+					return cursorMove(lab, cursor, "v")
+				} else {
+					return cursorMove(lab, cursor, "^")
+				}
+			}
+		}
+	}
+	// for i, _ := range lab[0] {
+	// 	fmt.Println(lab[i])
+	// }
+	return false
 }
